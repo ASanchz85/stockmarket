@@ -36,6 +36,9 @@ export const tickerTape = {
   ],
 };
 
+// Versión TV: misma cinta en modo de una sola línea (se amplía por CSS).
+export const tickerTapeTv = { ...tickerTape, displayMode: 'regular' };
+
 // Cinta inferior: rentabilidad del bono a 10 años del G8 + España.
 // TradingView no permite rentabilidades soberanas en sus widgets, así que se leen del
 // servicio público de cotizaciones de CNBC (no oficial, sin clave, con CORS abierto).
@@ -176,3 +179,6 @@ export const sessions = [
 
 // Recarga completa de la página cada N horas (útil para una TV encendida días enteros).
 export const RELOAD_EVERY_HOURS = 6;
+
+// Altura mínima de ventana (px) para usar la versión completa; por debajo se usa la versión TV.
+export const FULL_LAYOUT_MIN_HEIGHT = 1000;
