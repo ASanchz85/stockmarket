@@ -168,14 +168,14 @@ export const ibexHeatmap = {
   height: '100%',
 };
 
-// ---------- Versión TV: mini-charts a 1 año ----------
+// ---------- Versión TV: mini-charts a 6 meses ----------
 export const miniChart = (symbol, extra = {}) => ({
   symbol,
   width: '100%',
   height: '100%',
   autosize: true,
   locale: LOCALE,
-  dateRange: '12M',
+  dateRange: '6M',
   colorTheme: 'dark',
   isTransparent: true,
   largeChartUrl: '',
