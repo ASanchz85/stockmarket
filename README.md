@@ -9,6 +9,9 @@ npm run build     # genera dist/ (estático, servible con cualquier servidor web
 npm run preview   # sirve dist/ en http://localhost:4173
 ```
 
+- **Dos versiones**, elegidas automáticamente por la altura de la ventana (`FULL_LAYOUT_MIN_HEIGHT` en `src/config.js`, 1000 px):
+  - Completa (1080p): `src/layouts/FullLayout.jsx`. Forzar con `?layout=full`.
+  - TV 1440×900, simplificada y con letra grande: `src/layouts/TvLayout.jsx`. Forzar con `?layout=tv`.
 - Símbolos y configuración de cada widget: `src/config.js`.
 - Layout y estética: `src/styles.css` (grid de 3 columnas y 4 filas).
 - La cinta de deuda (`src/components/BondTape.jsx`) lee las rentabilidades a 10A del servicio público de CNBC cada 60 s (TradingView no las permite en widgets) y calcula la prima de riesgo frente al Bund.
