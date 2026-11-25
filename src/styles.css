@@ -341,6 +341,7 @@ body {
   background: rgba(255, 255, 255, 0.08);
   color: var(--muted);
 }
+.bond__top, .bond__bottom { display: contents; }
 .bond__name { font-weight: 700; }
 .bond__yld { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
 .bond__chg { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
@@ -397,20 +398,18 @@ body.cursor-hidden, body.cursor-hidden * { cursor: none !important; }
    Los widgets de TradingView se amplían con `zoom` (escala también su iframe).
    ===================================================================== */
 .dashboard--tv {
-  --ticker-h: 68px;
-  --header-h: 60px;
   --side-w: 290px;
-  --tape-h: 66px;
-  grid-template-columns: 1fr var(--side-w);
-  grid-template-rows: var(--ticker-h) var(--header-h) 1fr var(--tape-h);
+  /* altura de una tarjeta de la columna derecha (6 tarjetas en toda la altura) */
+  --card-h: calc((100vh - 20px - 5 * var(--gap)) / 6);
+  grid-template-columns: minmax(0, 1fr) var(--side-w);
+  grid-template-rows: var(--card-h) minmax(0, 1fr) var(--card-h);
   grid-template-areas:
     'ticker side'
-    'header side'
     'main   side'
     'bottom side';
 }
 .dashboard--tv .area-ticker { grid-area: ticker; }
-.dashboard--tv .area-header { grid-area: header; }
+.dashboard--tv .area-bottom { grid-area: bottom; }
 .dashboard--tv .area-main {
   grid-area: main;
   min-height: 0;
@@ -419,49 +418,59 @@ body.cursor-hidden, body.cursor-hidden * { cursor: none !important; }
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-rows: repeat(var(--rows), minmax(0, 1fr));
 }
-.dashboard--tv .area-bottom { grid-area: bottom; }
 .dashboard--tv .area-side {
   grid-area: side;
   min-height: 0;
   display: grid;
   gap: var(--gap);
-  grid-template-rows: calc(var(--ticker-h) + var(--gap) + var(--header-h)) repeat(5, minmax(0, 1fr));
+  grid-template-rows: repeat(6, minmax(0, 1fr));
 }
+.dashboard--tv .area-side .area-vix { grid-area: auto; }
 .dashboard--tv .mini-card { padding: 2px; }
 
 /* Widgets ampliados */
-.dashboard--tv .zoom-tape  { zoom: 1.45; }
+.dashboard--tv .zoom-tape  { zoom: 2; }
 .dashboard--tv .zoom-vix   { zoom: 1.35; }
-.dashboard--tv .zoom-mini  { zoom: 1.4; }
+.dashboard--tv .zoom-mini  { zoom: 1.5; }
 .dashboard--tv .zoom-stock { zoom: 1.2; }
 
-/* Cabeceras de panel */
-.dashboard--tv .panel__head { height: 38px; }
+/* Cabecera de la tarjeta VIX */
+.dashboard--tv .panel__head { height: 36px; }
 .dashboard--tv .panel__head h2 { font-size: 16px; letter-spacing: 0.1em; }
 .dashboard--tv .panel__tag { font-size: 13px; }
 .dashboard--tv .panel__dot { width: 10px; height: 10px; }
 
-/* Barra con reloj: sin marca ni hora de cada bolsa para ganar tamaño */
-.dashboard--tv .brand,
-.dashboard--tv .session__time { display: none; }
-.dashboard--tv .topbar { grid-template-columns: auto 1fr; }
-.dashboard--tv .clock { justify-content: flex-start; }
-.dashboard--tv .clock__time { font-size: 40px; }
-.dashboard--tv .clock__date { font-size: 19px; }
-.dashboard--tv .sessions { gap: 8px; }
-.dashboard--tv .session { font-size: 16px; padding: 6px 13px; gap: 8px; }
-.dashboard--tv .session__dot { width: 10px; height: 10px; }
-
-/* Cinta de deuda y Euríbor */
-.dashboard--tv .tape__label { font-size: 13px; padding: 0 16px; }
-.dashboard--tv .premium__label { font-size: 13px; }
-.dashboard--tv .premium__value { font-size: 28px; }
-.dashboard--tv .bond { font-size: 22px; gap: 10px; padding: 0 26px; }
-.dashboard--tv .bond__code { font-size: 13px; }
-.dashboard--tv .bond__chg { font-size: 18px; }
-.dashboard--tv .bond__spread { font-size: 17px; }
-.dashboard--tv .rate { gap: 10px; padding: 0 18px; }
-.dashboard--tv .rate__label { font-size: 16px; }
-.dashboard--tv .rate__value { font-size: 26px; }
-.dashboard--tv .rate__meta { font-size: 14px; }
-.dashboard--tv .area-side .area-vix { grid-area: auto; }
+/* Cinta de deuda (dos líneas por país) y Euríbor, a la altura de una tarjeta */
+.dashboard--tv .tape__label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  justify-content: center;
+  font-size: 13px;
+  padding: 0 12px;
+}
+.dashboard--tv .premium { flex-direction: column; justify-content: center; align-items: flex-start; gap: 4px; padding: 0 22px; }
+.dashboard--tv .premium__label { font-size: 15px; }
+.dashboard--tv .premium__value { font-size: 44px; line-height: 1; }
+.dashboard--tv .bond {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 30px;
+  height: 100%;
+}
+.dashboard--tv .bond__top,
+.dashboard--tv .bond__bottom { display: flex; align-items: baseline; gap: 12px; }
+.dashboard--tv .bond__name { font-size: 30px; }
+.dashboard--tv .bond__yld { font-size: 34px; }
+.dashboard--tv .bond__code { font-size: 15px; }
+.dashboard--tv .bond__chg { font-size: 24px; }
+.dashboard--tv .bond__spread { font-size: 24px; }
+.dashboard--tv .rate { flex-direction: column; justify-content: center; align-items: flex-start; gap: 4px; padding: 0 24px; }
+.dashboard--tv .rate__label { font-size: 18px; }
+.dashboard--tv .rate__value { font-size: 44px; line-height: 1; }
+.dashboard--tv .rate__meta { flex-direction: row; gap: 10px; font-size: 16px; }
+.dashboard--tv .row-tape { grid-template-columns: auto minmax(0, 1fr); }
+/* España resaltada dentro de la cinta */
+.dashboard--tv .bond--home { background: linear-gradient(180deg, rgba(245, 165, 36, 0.10), transparent); }
+.dashboard--tv .bond--home .bond__spread { font-weight: 700; }

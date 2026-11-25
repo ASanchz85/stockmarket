@@ -41,18 +41,24 @@ async function fetchYields() {
 function BondItem({ b, bund }) {
   const spread = bund && !b.benchmark ? Math.round((b.yld - bund.yld) * 100) : null;
   return (
-    <li className="bond">
-      <span className="bond__code">{b.code}</span>
-      <span className="bond__name">{b.name}</span>
-      <span className="bond__yld">{fmt(b.yld, 3)}%</span>
-      <span className={`bond__chg ${trend(b.changeBp)}`}>{signed(b.changeBp, 1)} pb</span>
-      {b.benchmark && <span className="bond__spread is-ref">referencia</span>}
-      {spread !== null && <span className="bond__spread">prima {signed(spread)} pb</span>}
+    <li className={`bond ${b.code === 'ES' ? 'bond--home' : ''}`}>
+      <span className="bond__top">
+        <span className="bond__code">{b.code}</span>
+        <span className="bond__name">{b.name}</span>
+        <span className="bond__yld">{fmt(b.yld, 3)}%</span>
+      </span>
+      <span className="bond__bottom">
+        <span className={`bond__chg ${trend(b.changeBp)}`}>{signed(b.changeBp, 1)} pb</span>
+        {b.benchmark && <span className="bond__spread is-ref">referencia</span>}
+        {spread !== null && <span className="bond__spread">prima {signed(spread)} pb</span>}
+      </span>
     </li>
   );
 }
 
-export default function BondTape() {
+// showPremium: bloque fijo con la prima de riesgo de España (la versión TV no lo usa:
+// España ya aparece con su prima dentro de la cinta que rota).
+export default function BondTape({ showPremium = true }) {
   const [data, setData] = useState([]);
   const [error, setError] = useState(false);
 
@@ -80,7 +86,7 @@ export default function BondTape() {
         Deuda 10A
         {error && <span className="tape__warn" title="Sin conexión con la fuente">●</span>}
       </span>
-      {premium !== null && (
+      {showPremium && premium !== null && (
         <span className="premium">
           <span className="premium__label">Prima de riesgo ES</span>
           <span className="premium__value">{premium} pb</span>

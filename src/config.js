@@ -36,8 +36,8 @@ export const tickerTape = {
   ],
 };
 
-// Versión TV: misma cinta en modo de una sola línea (se amplía por CSS).
-export const tickerTapeTv = { ...tickerTape, displayMode: 'regular' };
+// Versión TV: misma cinta en modo compacto (nombre / precio / variación apilados; se amplía por CSS).
+export const tickerTapeTv = { ...tickerTape, displayMode: 'compact' };
 
 // Cinta inferior: rentabilidad del bono a 10 años del G8 + España.
 // TradingView no permite rentabilidades soberanas en sus widgets, así que se leen del
@@ -188,11 +188,11 @@ export const miniChart = (symbol, extra = {}) => ({
 export const tvIndices = [
   { title: 'IBEX 35', symbol: 'BME:IBC' },
   { title: 'Euro Stoxx 50', symbol: 'FOREXCOM:EU50' },
+  { title: 'Nikkei 225', symbol: 'INDEX:NKY' },
   { title: 'S&P 500', symbol: 'FOREXCOM:SPXUSD' },
   { title: 'Dow Jones 30', symbol: 'FOREXCOM:DJI' },
   { title: 'Nasdaq 100', symbol: 'FOREXCOM:NSXUSD' },
-  { title: 'Nikkei 225', symbol: 'INDEX:NKY' },
-];
+]
 
 // Columna derecha: top 5 del S&P 500 (misma lista que featuredStocks).
 export const tvStocks = featuredStocks.symbolsGroups[0].symbols.map((s) => s.name);
