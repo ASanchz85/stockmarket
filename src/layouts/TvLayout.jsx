@@ -3,41 +3,47 @@ import Panel from '../components/Panel.jsx';
 import Header from '../components/Header.jsx';
 import BondTape from '../components/BondTape.jsx';
 import RatesStrip from '../components/RatesStrip.jsx';
-import { tickerTapeTv, vix, mainChart, worldIndices, featuredStocks } from '../config.js';
+import { tickerTapeTv, vix, miniChart, tvIndices, tvStocks } from '../config.js';
 
-// Versión simplificada para TV 1440×900 vista a distancia: sin noticias ni mapa de calor,
-// y con los widgets ampliados (ver .dashboard--tv en styles.css).
+const ACCENTS = ['var(--accent)', 'var(--violet)', 'var(--cyan)', 'var(--green)', 'var(--amber)', 'var(--red)'];
+
+// Versión simplificada para TV 1440×900 vista a distancia:
+// rejilla de mini-charts de índices (1 año) + columna derecha con VIX y top 5 del S&P 500.
 export default function TvLayout() {
   return (
     <div className="dashboard dashboard--tv">
-      <div className="row-top">
-        <div className="tape area-ticker">
-          <TradingViewWidget type="ticker-tape" config={tickerTapeTv} className="zoom-tape" />
-        </div>
-        <div className="area-header">
-          <Header />
-        </div>
+      <div className="tape area-ticker">
+        <TradingViewWidget type="ticker-tape" config={tickerTapeTv} className="zoom-tape" />
+      </div>
+
+      <div className="area-header">
+        <Header />
+      </div>
+
+      <div className="area-main" style={{ '--rows': Math.ceil(tvIndices.length / 3) }}>
+        {tvIndices.map((idx, i) => (
+          <Panel key={idx.symbol} title={idx.title} tag="1 año" accent={ACCENTS[i % ACCENTS.length]}>
+            <TradingViewWidget type="mini-symbol-overview" config={miniChart(idx.symbol)} className="fill zoom-mini" />
+          </Panel>
+        ))}
+      </div>
+
+      <aside className="area-side">
         <Panel className="area-vix" title="VIX" tag="Volatilidad" accent="var(--red)">
           <TradingViewWidget type="tickers" config={vix} className="zoom-vix" />
         </Panel>
-      </div>
+        {tvStocks.map((symbol) => (
+          <div key={symbol} className="panel mini-card">
+            <TradingViewWidget
+              type="mini-symbol-overview"
+              config={miniChart(symbol, { noTimeScale: true })}
+              className="fill zoom-stock"
+            />
+          </div>
+        ))}
+      </aside>
 
-      <div className="row-middle">
-        <Panel className="panel--chart" title="Gráfico" tag="Por defecto: IBEX 35">
-          <TradingViewWidget type="advanced-chart" config={mainChart} className="fill zoom-chart" />
-        </Panel>
-
-        <div className="stack">
-          <Panel className="panel--quotes" title="Índices mundiales" accent="var(--violet)">
-            <TradingViewWidget type="market-quotes" config={worldIndices} className="fill zoom-quotes" />
-          </Panel>
-          <Panel className="panel--quotes" title="Top 5 S&P 500" tag="Capitalización" accent="var(--cyan)">
-            <TradingViewWidget type="market-quotes" config={featuredStocks} className="fill zoom-quotes" />
-          </Panel>
-        </div>
-      </div>
-
-      <div className="row-tape">
+      <div className="row-tape area-bottom">
         <BondTape />
         <RatesStrip />
       </div>

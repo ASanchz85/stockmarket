@@ -168,6 +168,35 @@ export const ibexHeatmap = {
   height: '100%',
 };
 
+// ---------- Versión TV: mini-charts a 1 año ----------
+export const miniChart = (symbol, extra = {}) => ({
+  symbol,
+  width: '100%',
+  height: '100%',
+  autosize: true,
+  locale: LOCALE,
+  dateRange: '12M',
+  colorTheme: 'dark',
+  isTransparent: true,
+  largeChartUrl: '',
+  chartOnly: false,
+  noTimeScale: false,
+  ...extra,
+});
+
+// Rejilla principal (3 columnas; las filas se ajustan al número de elementos).
+export const tvIndices = [
+  { title: 'IBEX 35', symbol: 'BME:IBC' },
+  { title: 'Euro Stoxx 50', symbol: 'FOREXCOM:EU50' },
+  { title: 'S&P 500', symbol: 'FOREXCOM:SPXUSD' },
+  { title: 'Dow Jones 30', symbol: 'FOREXCOM:DJI' },
+  { title: 'Nasdaq 100', symbol: 'FOREXCOM:NSXUSD' },
+  { title: 'Nikkei 225', symbol: 'INDEX:NKY' },
+];
+
+// Columna derecha: top 5 del S&P 500 (misma lista que featuredStocks).
+export const tvStocks = featuredStocks.symbolsGroups[0].symbols.map((s) => s.name);
+
 // Sesiones bursátiles (horario local de cada plaza, lunes a viernes; no contempla festivos).
 export const sessions = [
   { label: 'Madrid', tz: 'Europe/Madrid', open: '09:00', close: '17:30' },
