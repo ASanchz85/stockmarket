@@ -430,7 +430,9 @@ body.cursor-hidden, body.cursor-hidden * { cursor: none !important; }
 
 /* Widgets ampliados */
 .dashboard--tv .zoom-tape  { zoom: 2; }
-.dashboard--tv .zoom-vix   { zoom: 1.35; }
+.dashboard--tv .zoom-vix   { zoom: 1.3; }
+.dashboard--tv .vix-card { display: flex; align-items: center; padding: 0 4px; }
+.dashboard--tv .vix-card .tradingview-widget-container { width: 100%; height: auto !important; }
 .dashboard--tv .zoom-mini  { zoom: 1.5; }
 .dashboard--tv .zoom-stock { zoom: 1.2; }
 
@@ -474,3 +476,32 @@ body.cursor-hidden, body.cursor-hidden * { cursor: none !important; }
 /* España resaltada dentro de la cinta */
 .dashboard--tv .bond--home { background: linear-gradient(180deg, rgba(245, 165, 36, 0.10), transparent); }
 .dashboard--tv .bond--home .bond__spread { font-weight: 700; }
+
+/* Versión TV: tapar el logo de TradingView (está dentro del iframe, no se puede ocultar con CSS).
+   Parche opaco del color de la tarjeta sobre la esquina superior derecha de los mini-charts
+   y fundido en el borde derecho de la cinta superior. */
+.dashboard--tv .mini-card::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: var(--logo-w, 60px);
+  height: var(--logo-h, 42px);
+  background: var(--surface-2);
+  border-radius: 0 calc(var(--radius) - 2px) 0 10px;
+  z-index: 2;
+  pointer-events: none;
+}
+.dashboard--tv .mini-card:has(.zoom-stock) { --logo-w: 44px; --logo-h: 34px; }
+.dashboard--tv .vix-card::after { display: none; }
+.dashboard--tv .area-ticker::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 150px;
+  background: linear-gradient(90deg, transparent, var(--surface) 55%);
+  z-index: 2;
+  pointer-events: none;
+}

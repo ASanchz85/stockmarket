@@ -1,5 +1,4 @@
 import TradingViewWidget from '../components/TradingViewWidget.jsx';
-import Panel from '../components/Panel.jsx';
 import BondTape from '../components/BondTape.jsx';
 import RatesStrip from '../components/RatesStrip.jsx';
 import { tickerTapeTv, vix, miniChart, tvIndices, tvStocks } from '../config.js';
@@ -23,9 +22,9 @@ export default function TvLayout() {
       </div>
 
       <aside className="area-side">
-        <Panel className="area-vix" title="VIX" tag="Volatilidad" accent="var(--red)">
+        <div className="panel mini-card vix-card" title="VIX · Volatilidad">
           <TradingViewWidget type="tickers" config={vix} className="zoom-vix" />
-        </Panel>
+        </div>
         {tvStocks.map((symbol) => (
           <div key={symbol} className="panel mini-card">
             <TradingViewWidget
