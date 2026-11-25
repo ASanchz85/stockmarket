@@ -1,0 +1,393 @@
+:root {
+  --bg: #06080d;
+  --surface: #0c1018;
+  --surface-2: #111724;
+  --border: rgba(148, 163, 184, 0.10);
+  --text: #e5e9f0;
+  --muted: #7d8799;
+  --accent: #3b82f6;
+  --amber: #f5a524;
+  --violet: #8b5cf6;
+  --green: #22c55e;
+  --cyan: #06b6d4;
+  --red: #ef4444;
+  --radius: 14px;
+  --gap: 8px;
+
+  --ticker-h: 46px;
+  --header-h: 50px;
+  --bottom-h: 266px;
+  --vix-w: 230px;
+  --news-w: 400px;
+  --quotes-w: 490px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 15% -10%, rgba(59, 130, 246, 0.10), transparent 60%),
+    radial-gradient(900px 500px at 110% 110%, rgba(139, 92, 246, 0.08), transparent 60%),
+    var(--bg);
+}
+
+/* ---------- Layout 1440 x 900 ---------- */
+.dashboard {
+  width: 100vw;
+  height: 100vh;
+  padding: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-rows: calc(var(--ticker-h) + var(--gap) + var(--header-h)) 1fr var(--bottom-h) var(--ticker-h);
+}
+.dashboard > * { min-height: 0; }
+
+.row-top {
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 1fr var(--vix-w);
+  grid-template-rows: var(--ticker-h) var(--header-h);
+  grid-template-areas:
+    'ticker vix'
+    'header vix';
+}
+.area-ticker { grid-area: ticker; }
+.area-header { grid-area: header; min-width: 0; }
+.area-vix    { grid-area: vix; }
+
+.row-middle {
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 1fr var(--news-w);
+}
+.row-bottom {
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: var(--quotes-w) 1fr var(--quotes-w);
+}
+
+/* ---------- Ticker tapes ---------- */
+.tape {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.08), rgba(12, 16, 24, 0.9) 30%, rgba(12, 16, 24, 0.9) 70%, rgba(139, 92, 246, 0.08));
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+}
+.tape .tradingview-widget-container { flex: 1; min-width: 0; }
+.area-bonds {
+  background: linear-gradient(90deg, rgba(245, 165, 36, 0.10), rgba(12, 16, 24, 0.9) 30%, rgba(12, 16, 24, 0.9) 70%, rgba(245, 165, 36, 0.06));
+}
+.tape__label {
+  flex: 0 0 auto;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--amber);
+  border-right: 1px solid var(--border);
+  background: rgba(245, 165, 36, 0.06);
+}
+
+/* ---------- VIX ---------- */
+.area-vix .panel__body { padding: 0 6px; display: flex; align-items: center; }
+.area-vix .tradingview-widget-container { width: 100%; }
+
+/* ---------- Panels ---------- */
+.panel {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.panel::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--panel-accent), transparent 70%);
+  opacity: 0.9;
+}
+
+.panel__head {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--border);
+}
+.panel__head h2 {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.panel__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--panel-accent);
+  box-shadow: 0 0 10px var(--panel-accent);
+}
+.panel__tag {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.panel__body {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 4px;
+}
+
+/* Los widgets llenan su panel */
+.tradingview-widget-container.fill,
+.tradingview-widget-container.fill .tradingview-widget-container__widget {
+  width: 100%;
+  height: 100%;
+}
+.tradingview-widget-container iframe {
+  border: 0;
+  /* Evita que Chrome pinte de blanco los iframes transparentes */
+  color-scheme: normal;
+}
+.tradingview-widget-copyright { display: none; }
+
+/* ---------- Header ---------- */
+.topbar {
+  height: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 24px;
+  align-items: center;
+  padding: 0 18px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: rgba(12, 16, 24, 0.75);
+}
+
+.brand { display: flex; align-items: baseline; gap: 10px; }
+.brand__live {
+  align-self: center;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
+  animation: pulse 2s infinite;
+}
+.brand__name {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.brand__sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.clock { display: flex; align-items: baseline; justify-content: center; gap: 12px; white-space: nowrap; }
+.clock__time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.clock__date {
+  font-size: 13px;
+  color: var(--muted);
+}
+.clock__date::first-letter { text-transform: uppercase; }
+
+.sessions {
+  list-style: none;
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+.session {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  font-size: 11px;
+}
+.session__dot { width: 7px; height: 7px; border-radius: 50%; }
+.session__name { font-weight: 600; }
+.session__time {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.session.is-open { border-color: rgba(34, 197, 94, 0.35); background: rgba(34, 197, 94, 0.07); }
+.session.is-open .session__dot { background: var(--green); box-shadow: 0 0 8px var(--green); }
+.session.is-closed { opacity: 0.6; }
+.session.is-closed .session__dot { background: #475569; }
+
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+  70%  { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+/* Las listas de cotizaciones añaden columnas según el ancho: difuminamos el borde derecho */
+.panel--quotes .panel__body {
+  -webkit-mask-image: linear-gradient(to right, #000 90%, transparent 99%);
+  mask-image: linear-gradient(to right, #000 90%, transparent 99%);
+}
+
+.panel--quotes .panel__body { padding: 0; }
+
+/* ---------- Cinta de deuda soberana (propia) ---------- */
+.tape__warn { margin-left: 6px; color: var(--red); font-size: 9px; }
+
+.premium {
+  flex: 0 0 auto;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  border-right: 1px solid var(--border);
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.10), rgba(245, 165, 36, 0.06));
+}
+.premium__label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.premium__value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.marquee {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 3%, #000 97%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 3%, #000 97%, transparent);
+}
+.marquee__track {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  animation: marquee calc(var(--items) * 7s) linear infinite;
+}
+.marquee__group {
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+.bond {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 0 22px;
+  border-right: 1px solid var(--border);
+  white-space: nowrap;
+  font-size: 15px;
+}
+.bond__code {
+  align-self: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--muted);
+}
+.bond__name { font-weight: 700; }
+.bond__yld { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+.bond__chg { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+.bond__chg.up { color: var(--red); }     /* sube la rentabilidad: el bono cae */
+.bond__chg.down { color: var(--green); }
+.bond__chg.flat { color: var(--muted); }
+.bond__spread {
+  font-size: 12px;
+  color: var(--amber);
+}
+.bond__spread.is-ref { color: var(--muted); font-style: italic; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Puntero oculto tras unos segundos sin mover el ratón */
+body.cursor-hidden, body.cursor-hidden * { cursor: none !important; }
+
+/* ---------- Tipos de referencia (propio) ---------- */
+.rates {
+  display: flex;
+  align-items: stretch;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: rgba(12, 16, 24, 0.9);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.row-tape {
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+.rate {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  border-right: 1px solid var(--border);
+}
+.rate:last-child { border-right: 0; }
+.rate__label { font-size: 12px; font-weight: 600; color: var(--muted); }
+.rate__value { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; }
+.rate__meta { display: flex; flex-direction: column; line-height: 1.15; font-size: 10px; color: var(--muted); }
+.rate__chg.up { color: var(--red); }     /* sube el tipo: encarece la hipoteca */
+.rate__chg.down { color: var(--green); }
+.rate.is-highlight { background: rgba(6, 182, 212, 0.07); }
+.rate.is-highlight .rate__label { color: var(--text); }
